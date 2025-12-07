@@ -7,9 +7,7 @@ import {
   Path,
   SubmitHandler,
   useForm,
-  UseFormReturn,
 } from "react-hook-form";
-import { ZodType } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +22,13 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import FileUpload from "@/components/FileUpload";
-// import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { z } from "zod";
 
 interface Props<T extends FieldValues> {
-  schema: ZodType<T>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: z.ZodType<any, any>;
   defaultValues: T;
   onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
   type: "SIGN_IN" | "SIGN_UP";
@@ -45,7 +44,7 @@ const AuthForm = <T extends FieldValues>({
 
   const isSignIn = type === "SIGN_IN";
 
-  const form: UseFormReturn<T> = useForm({
+  const form = useForm<T>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
