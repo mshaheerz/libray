@@ -1,0 +1,396 @@
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-ibm-plex-sans: IBM Plex Sans, sans-serif;
+  --font-bebas-neue: var(--bebas-neue);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-primary: #e7c9a5;
+  --color-primary-admin: #25388c;
+
+  --color-green-100: #ecfdf3;
+  --color-green-400: #4c7b62;
+  --color-green-500: #2cc171;
+  --color-green-800: #027a48;
+  --color-green: #027a48;
+
+  --color-red-400: #f46f70;
+  --color-red-500: #e27233;
+  --color-red-800: #ef3a4b;
+  --color-red: #ef3a4b;
+
+  --color-blue-100: #0089f1;
+
+  --color-light-100: #d6e0ff;
+  --color-light-200: #eed1ac;
+  --color-light-300: #f8f8ff;
+  --color-light-400: #edf1f1;
+  --color-light-500: #8d8d8d;
+  --color-light-600: #f9fafb;
+  --color-light-700: #e2e8f0;
+  --color-light-800: #f8fafc;
+
+  --color-dark-100: #16191e;
+  --color-dark-200: #3a354e;
+  --color-dark-300: #232839;
+  --color-dark-400: #1e293b;
+  --color-dark-500: #0f172a;
+  --color-dark-600: #333c5c;
+  --color-dark-700: #464f6f;
+  --color-dark-800: #1e2230;
+
+  --color-gray-100: #cbd5e1;
+
+  --breakpoint-xs: 480px;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --background-image-pattern: url('/images/pattern.webp');
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility admin-container {
+  @apply flex w-[calc(100%-264px)] flex-1 flex-col bg-light-300 p-5 xs:p-10;
+}
+
+@utility back-btn {
+  @apply mb-10! w-fit! border! border-light-300! bg-white! text-xs! font-medium! text-dark-200! hover:bg-light-300!;
+}
+
+@utility confirm-trigger {
+  /* Confirmation Dialog */
+  @apply font-semibold! text-sm! shadow-none! hover:bg-opacity-70! w-full!;
+}
+
+@utility confirm-approve {
+  @apply bg-green-100! text-green-800! hover:bg-green-100/70!;
+}
+
+@utility confirm-reject {
+  @apply bg-red-100! text-red-800! hover:bg-red-100/70!;
+}
+
+@utility confirm-content {
+  @apply sm:max-w-md! flex! flex-col! items-center! justify-center! p-6!;
+}
+
+@utility confirm-illustration {
+  @apply size-28 rounded-full flex justify-center items-center mx-auto;
+
+  & div:first-child {
+    @apply size-[70%] rounded-full flex justify-center items-center;
+  }
+}
+
+@utility confirm-btn {
+  @apply w-full! min-h-14! rounded-xl! font-bold! text-base! text-light-800!;
+}
+
+@utility book-form_input {
+  /* Book Form */
+  @apply min-h-14! border! border-gray-100! bg-light-600! p-4! text-base! font-semibold! placeholder:font-normal! placeholder:text-slate-500!;
+}
+
+@utility book-form_btn {
+  @apply min-h-14! w-full! bg-primary-admin! hover:bg-primary-admin/95!;
+}
+
+@utility view-btn {
+  /* Home Page */
+  @apply bg-light-300! rounded-md! text-primary-admin! font-semibold! hover:bg-light-300/80! shadow-none!;
+}
+
+@utility add-new-book_btn {
+  @apply mt-7 mb-3 bg-light-300 py-4 px-3 flex flex-row items-center rounded-xl gap-4;
+
+  & div:first-child {
+    @apply size-12 bg-white rounded-full flex justify-center items-center;
+  }
+
+  & p:first-child {
+    @apply font-semibold text-lg text-dark-400;
+  }
+}
+
+@utility stat {
+  /* Statistics */
+  @apply bg-white rounded-xl p-5 space-y-5 flex-1;
+}
+
+@utility stat-info {
+  @apply flex justify-between items-center gap-5;
+}
+
+@utility stat-label {
+  @apply font-medium text-base text-light-500 whitespace-nowrap;
+}
+
+@utility stat-count {
+  @apply font-semibold text-3xl text-dark-400;
+}
+
+@utility book-stripe {
+  /* Book Stripe */
+  @apply flex flex-row gap-4 bg-light-300 p-4 rounded-lg;
+
+  & .title {
+    @apply font-semibold text-base text-dark-400 line-clamp-1;
+  }
+
+  & .author {
+    @apply flex flex-wrap flex-row items-center gap-2;
+  }
+
+  & .author p:first-child {
+    @apply text-light-500 text-sm line-clamp-1;
+  }
+
+  & .author div {
+    @apply size-1 rounded-full bg-light-500;
+  }
+
+  & .author p:last-child {
+    @apply text-light-500 text-sm;
+  }
+
+  & .user {
+    @apply mt-2.5 flex flex-row flex-wrap gap-5;
+  }
+
+  & .user .avatar {
+    @apply flex flex-row items-center gap-1.5;
+  }
+
+  & .user .avatar p {
+    @apply text-xs text-dark-200;
+  }
+
+  & .borrow-date {
+    @apply flex flex-row items-center gap-1.5;
+  }
+
+  & .borrow-date p {
+    @apply text-xs text-dark-200;
+  }
+}
+
+@utility title {
+  .book-stripe & {
+    @apply font-semibold text-base text-dark-400 line-clamp-1;
+  }
+}
+
+@utility author {
+  .book-stripe & {
+    @apply flex flex-wrap flex-row items-center gap-2;
+  }
+
+  .book-stripe & p:first-child {
+    @apply text-light-500 text-sm line-clamp-1;
+  }
+
+  .book-stripe & div {
+    @apply size-1 rounded-full bg-light-500;
+  }
+
+  .book-stripe & p:last-child {
+    @apply text-light-500 text-sm;
+  }
+}
+
+@utility user {
+  .book-stripe & {
+    @apply mt-2.5 flex flex-row flex-wrap gap-5;
+  }
+
+  .book-stripe & .avatar {
+    @apply flex flex-row items-center gap-1.5;
+  }
+
+  .book-stripe & .avatar p {
+    @apply text-xs text-dark-200;
+  }
+
+  .admin-sidebar & {
+    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-xs max-md:px-2;
+  }
+}
+
+@utility avatar {
+  .book-stripe .user & {
+    @apply flex flex-row items-center gap-1.5;
+  }
+
+  .book-stripe .user & p {
+    @apply text-xs text-dark-200;
+  }
+}
+
+@utility borrow-date {
+  .book-stripe & {
+    @apply flex flex-row items-center gap-1.5;
+  }
+
+  .book-stripe & p {
+    @apply text-xs text-dark-200;
+  }
+}
+
+@utility color-picker {
+  /* Color Picker */
+  @apply flex min-h-14 flex-row items-center gap-3 rounded-md border border-gray-100 bg-light-600 p-4 text-base font-semibold text-dark-400;
+}
+
+@utility hex-input {
+  @apply h-full flex-1 bg-transparent font-ibm-plex-sans outline-hidden;
+}
+
+@utility hex-color-picker {
+  @apply absolute left-0 top-full z-50 mt-3;
+}
+
+@utility error-fallback {
+  /* Error Fallback */
+  @apply p-4 bg-red-100 text-red-700 rounded-md;
+
+  & h2 {
+    @apply text-lg font-semibold mb-2;
+  }
+}
+
+@utility admin-header {
+  /* Header */
+  @apply flex lg:items-end items-start justify-between lg:flex-row flex-col gap-5 sm:mb-10 mb-5;
+}
+
+@utility admin-search {
+  /* Search */
+  @apply flex border border-gray-100 min-h-14 items-center gap-1 rounded-md bg-light-600 px-4 lg:max-w-md w-full;
+}
+
+@utility admin-search_input {
+  @apply w-full! border-0! shadow-none! bg-transparent! outline-hidden! focus:outline-hidden! focus:ring-0! focus:border-0!;
+}
+
+@utility admin-sidebar {
+  /* Sidebar */
+  @apply sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10;
+
+  & .logo {
+    @apply flex flex-row items-center gap-2 border-b border-dashed border-primary-admin/20 pb-10 max-md:justify-center;
+  }
+
+  & .logo h1 {
+    @apply text-2xl font-semibold text-primary-admin max-md:hidden;
+  }
+
+  & .link {
+    @apply flex flex-row items-center w-full gap-2 rounded-lg px-5 py-3.5 max-md:justify-center;
+  }
+
+  & .link p {
+    @apply text-base font-medium max-md:hidden;
+  }
+
+  & .user {
+    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-xs max-md:px-2;
+  }
+}
+
+@utility logo {
+  .admin-sidebar & {
+    @apply flex flex-row items-center gap-2 border-b border-dashed border-primary-admin/20 pb-10 max-md:justify-center;
+  }
+
+  .admin-sidebar & h1 {
+    @apply text-2xl font-semibold text-primary-admin max-md:hidden;
+  }
+}
+
+@utility link {
+  .admin-sidebar & {
+    @apply flex flex-row items-center w-full gap-2 rounded-lg px-5 py-3.5 max-md:justify-center;
+  }
+
+  .admin-sidebar & p {
+    @apply text-base font-medium max-md:hidden;
+  }
+}
+
+@utility user-card {
+  /* User Card */
+  @apply w-40 bg-light-300 py-4 px-3 flex justify-center items-center flex-col rounded-xl text-center;
+
+  & .name {
+    @apply font-medium mt-3 text-dark-400 line-clamp-1 w-full wrap-break-word;
+  }
+
+  & .email {
+    @apply text-light-500 text-sm line-clamp-1 wrap-break-word w-full;
+  }
+}
+
+@utility name {
+  .user-card & {
+    @apply font-medium mt-3 text-dark-400 line-clamp-1 w-full wrap-break-word;
+  }
+}
+
+@utility email {
+  .user-card & {
+    @apply text-light-500 text-sm line-clamp-1 wrap-break-word w-full;
+  }
+}

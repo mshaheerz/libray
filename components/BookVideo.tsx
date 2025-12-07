@@ -1,15 +1,16 @@
 "use client";
 import React from "react";
-import { IKVideo, ImageKitProvider } from "imagekitio-next";
+import { ImageKitProvider } from "@imagekit/next";
 import config from "@/lib/config";
 
 const BookVideo = ({ videoUrl }: { videoUrl: string }) => {
   return (
-    <ImageKitProvider
-      publicKey={config.env.imagekit.publicKey}
-      urlEndpoint={config.env.imagekit.urlEndpoint}
-    >
-      <IKVideo path={videoUrl} controls={true} className="w-full rounded-xl" />
+    <ImageKitProvider urlEndpoint={config.env.imagekit.urlEndpoint}>
+      <video
+        src={`${config.env.imagekit.urlEndpoint}/${videoUrl}`}
+        controls
+        className="w-full rounded-xl"
+      />
     </ImageKitProvider>
   );
 };

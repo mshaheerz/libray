@@ -9,8 +9,8 @@ const BookCard = ({
   id,
   title,
   genre,
-  coverColor,
-  coverUrl,
+   color:coverColor,
+  cover:coverUrl,
   isLoanedBook = false,
 }: Book) => (
   <li className={cn(isLoanedBook && "xs:w-52 w-full")}>
@@ -38,7 +38,7 @@ const BookCard = ({
             <p className="text-light-100">11 days left to return</p>
           </div>
 
-          <Button className="book-btn">Download receipt</Button>
+          <Button className="book-btn cursor-pointer">Download receipt</Button>
         </div>
       )}
     </Link>

@@ -17,8 +17,8 @@ const BookOverview = async ({
   totalCopies,
   availableCopies,
   description,
-  coverColor,
-  coverUrl,
+  color:coverColor,
+  cover:coverUrl,
   id,
   userId,
 }: Props) => {
@@ -35,19 +35,20 @@ const BookOverview = async ({
   //       ? "Book is not available"
   //       : "You are not eligible to borrow this book",
   // };
+  const user = true
   return (
     <section className="book-overview text-white">
       <div className="flex flex-1 flex-col gap-5">
-        <h1>{title}The Midnight Library</h1>
+        <h1>{title}</h1>
 
         <div className="book-info ">
           <p>
-            By <span className="font-semibold text-light-200">{author}achoos</span>
+            By <span className="font-semibold text-light-200">{author}</span>
           </p>
 
           <p>
             Category{" "}
-            <span className="font-semibold text-light-200">{genre}scifi</span>
+            <span className="font-semibold text-light-200">{genre}</span>
           </p>
 
           <div className="flex flex-row gap-1">
@@ -58,26 +59,26 @@ const BookOverview = async ({
 
         <div className="book-copies">
           <p>
-            Total Books <span>{totalCopies}50</span>
+            Total Books <span>{totalCopies}</span>
           </p>
 
           <p>
-            Available Books <span>{availableCopies}20</span>
+            Available Books <span>{availableCopies}</span>
           </p>
         </div>
 
-        <p className="book-description">{description} some of thes thigs ins better</p>
+        <p className="book-description">{description}</p>
 
-        {/* {user && (
+        {user && (
           <BorrowBook
             bookId={id}
             userId={userId}
-            borrowingEligibility={borrowingEligibility}
+            // borrowingEligibility={borrowingEligibility}
           />
-        )} */}
+        )}
       </div>
 
-      {/* <div className="relative flex flex-1 justify-center">
+      <div className="relative flex flex-1 justify-center">
         <div className="relative">
           <BookCover
             variant="wide"
@@ -94,7 +95,7 @@ const BookOverview = async ({
             />
           </div>
         </div>
-      </div> */}
+      </div>
     </section>
   );
 };

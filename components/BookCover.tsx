@@ -3,7 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import BookCoverSvg from "@/components/BookCoverSvg";
-import { IKImage } from "imagekitio-next";
+import { Image as IKImage, ImageKitProvider } from "@imagekit/next";
 import config from "@/lib/config";
 
 type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
@@ -29,31 +29,37 @@ const BookCover = ({
   coverColor = "#012B48",
   coverImage = "https://placehold.co/400x600.png",
 }: Props) => {
-  return (
-    <div
-      className={cn(
-        "relative transition-all duration-300",
-        variantStyles[variant],
-        className,
-      )}
-    >
-      <BookCoverSvg coverColor={coverColor} />
+  const {
+    env: {
+      imagekit: { urlEndpoint },
+    },
+  } = config;
 
+  return (
+    <ImageKitProvider urlEndpoint={urlEndpoint}>
       <div
-        className="absolute z-10"
-        style={{ left: "12%", width: "87.5%", height: "88%" }}
+        className={cn(
+          "relative transition-all duration-300",
+          variantStyles[variant],
+          className
+        )}
       >
-        <IKImage
-          path={coverImage}
-          urlEndpoint={config.env.imagekit.urlEndpoint}
-          alt="Book cover"
-          fill
-          className="rounded-sm object-fill"
-          loading="lazy"
-          lqip={{ active: true }}
-        />
+        <BookCoverSvg coverColor={coverColor} />
+
+        <div
+          className="absolute z-10"
+          style={{ left: "12%", width: "87.5%", height: "88%" }}
+        >
+          <IKImage
+            src={coverImage}
+            alt="Book cover"
+            fill
+            className="rounded-sm object-fill"
+            loading="lazy"
+          />
+        </div>
       </div>
-    </div>
+    </ImageKitProvider>
   );
 };
 export default BookCover;
