@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import { toast } from "@/hooks/use-toast";
-// import { borrowBook } from "@/lib/actions/book";
+import { toast } from "@/hooks/use-toast";
+import { borrowBook } from "@/lib/actions/book";
 
 interface Props {
   userId: string;
@@ -19,49 +19,49 @@ interface Props {
 const BorrowBook= ({
   userId,
   bookId,
-  // borrowingEligibility: { isEligible, message },
+  borrowingEligibility: { isEligible, message },
 }: Props) => {
   const router = useRouter();
   const [borrowing, setBorrowing] = useState(false);
 
-  // const handleBorrowBook = async () => {
-  //   if (!isEligible) {
-  //     toast({
-  //       title: "Error",
-  //       description: message,
-  //       variant: "destructive",
-  //     });
-  //   }
+  const handleBorrowBook = async () => {
+    if (!isEligible) {
+      toast({
+        title: "Error",
+        description: message,
+        variant: "destructive",
+      });
+    }
 
-  //   setBorrowing(true);
+    setBorrowing(true);
 
-  //   try {
-  //     const result = await borrowBook({ bookId, userId });
+    try {
+      const result = await borrowBook({ bookId, userId });
 
-  //     if (result.success) {
-  //       toast({
-  //         title: "Success",
-  //         description: "Book borrowed successfully",
-  //       });
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Book borrowed successfully",
+        });
 
-  //       router.push("/");
-  //     } else {
-  //       toast({
-  //         title: "Error",
-  //         description: result.error,
-  //         variant: "destructive",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error",
-  //       description: "An error occurred while borrowing the book",
-  //       variant: "destructive",
-  //     });
-  //   } finally {
-  //     setBorrowing(false);
-  //   }
-  // };
+        router.push("/");
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while borrowing the book",
+        variant: "destructive",
+      });
+    } finally {
+      setBorrowing(false);
+    }
+  };
 
   return (
     <Button
