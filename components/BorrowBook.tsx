@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { borrowBook } from "@/lib/actions/book";
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
   };
 }
 
-const BorrowBook= ({
+const BorrowBook = ({
   userId,
   bookId,
   borrowingEligibility: { isEligible, message },
@@ -26,11 +26,10 @@ const BorrowBook= ({
 
   const handleBorrowBook = async () => {
     if (!isEligible) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: message,
-        variant: "destructive",
       });
+      return;
     }
 
     setBorrowing(true);
@@ -39,24 +38,19 @@ const BorrowBook= ({
       const result = await borrowBook({ bookId, userId });
 
       if (result.success) {
-        toast({
-          title: "Success",
+        toast.success("Success", {
           description: "Book borrowed successfully",
         });
 
         router.push("/");
       } else {
-        toast({
-          title: "Error",
+        toast.error("Error", {
           description: result.error,
-          variant: "destructive",
         });
       }
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "An error occurred while borrowing the book",
-        variant: "destructive",
       });
     } finally {
       setBorrowing(false);
@@ -66,7 +60,7 @@ const BorrowBook= ({
   return (
     <Button
       className="book-overview_btn cursor-pointer"
-      // onClick={handleBorrowBook}
+      onClick={handleBorrowBook}
       disabled={borrowing}
     >
       <Image src="/icons/book.svg" alt="book" width={20} height={20} />
