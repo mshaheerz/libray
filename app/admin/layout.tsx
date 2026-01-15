@@ -1,9 +1,24 @@
-import React from 'react'
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import React from "react";
+import '@/styles/admin.css'
 
-function Layout() {
+
+async function Layout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+
+  if (!session?.user?.id) redirect("/");
   return (
-    <div>Layout</div>
-  )
+    <main className="flex min-h-screen w-full flex-row">
+      <div>Sidebar</div>
+      <div className="admin-container">
+        <p>
+          <p>Header</p>
+          {children}
+        </p>
+      </div>
+    </main>
+  );
 }
 
-export default Layout
+export default Layout;
