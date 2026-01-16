@@ -1,15 +1,15 @@
 import { db } from "@/database/drizzle";
-import { users as usersDb, borrowRecords } from "@/database/schema";
+import { users } from "@/database/schema";
 import TableLayout from "@/components/admin/TableLayout";
 import TableHeader from "@/components/admin/TableHeader";
 import Table, { Column } from "@/components/admin/Table";
+import { desc, asc, ilike, or, count, eq, and } from "drizzle-orm";
+import Pagination from "@/components/admin/Pagination";
+import dayjs from "dayjs";
+import ViewIdCard from "@/components/admin/ViewIdCard";
+import AccountRequestActions from "@/components/admin/AccountRequestActions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
-import UserActions from "@/components/admin/UserActions";
-import ViewIdCard from "@/components/admin/ViewIdCard";
-import { count, eq, ilike, desc, asc, or } from "drizzle-orm";
-import UserRoleSelect from "@/components/admin/UserRoleSelect";
-import Pagination from "@/components/admin/Pagination";
 
 async function Page({
   searchParams,
@@ -23,58 +23,53 @@ async function Page({
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  // Get data and total count for pagination
-  const [users, totalCountRes] = await Promise.all([
+  // We only want users who are PENDING for this page
+  const [pendingUsers, totalCountRes] = await Promise.all([
     db
-      .select({
-        id: usersDb.id,
-        fullName: usersDb.fullName,
-        email: usersDb.email,
-        role: usersDb.role,
-        createdAt: usersDb.createdAt,
-        universityId: usersDb.universityId,
-        universityCard: usersDb.universityCard,
-        borrowCount: count(borrowRecords.id),
-      })
-      .from(usersDb)
-      .leftJoin(borrowRecords, eq(usersDb.id, borrowRecords.userId))
+      .select()
+      .from(users)
       .where(
-        query
-          ? or(
-              ilike(usersDb.fullName, `%${query}%`),
-              ilike(usersDb.email, `%${query}%`)
-            )
-          : undefined
+        and(
+          eq(users.status, "PENDING"),
+          query
+            ? or(
+                ilike(users.fullName, `%${query}%`),
+                ilike(users.email, `%${query}%`)
+              )
+            : undefined
+        )
       )
-      .groupBy(usersDb.id)
       .orderBy(
         sort === "oldest"
-          ? asc(usersDb.createdAt)
+          ? asc(users.createdAt)
           : sort === "name_asc"
-            ? asc(usersDb.fullName)
+            ? asc(users.fullName)
             : sort === "name_desc"
-              ? desc(usersDb.fullName)
-              : desc(usersDb.createdAt)
+              ? desc(users.fullName)
+              : desc(users.createdAt)
       )
       .limit(limit)
       .offset(offset),
     db
       .select({ count: count() })
-      .from(usersDb)
+      .from(users)
       .where(
-        query
-          ? or(
-              ilike(usersDb.fullName, `%${query}%`),
-              ilike(usersDb.email, `%${query}%`)
-            )
-          : undefined
+        and(
+          eq(users.status, "PENDING"),
+          query
+            ? or(
+                ilike(users.fullName, `%${query}%`),
+                ilike(users.email, `%${query}%`)
+              )
+            : undefined
+        )
       ),
   ]);
 
   const totalCount = totalCountRes[0].count;
   const totalPages = Math.ceil(totalCount / limit);
 
-  type UserRow = (typeof users)[0];
+  type UserRow = (typeof pendingUsers)[0];
 
   const columns: Column<UserRow>[] = [
     {
@@ -97,25 +92,10 @@ async function Page({
     },
     {
       header: "Date Joined",
-      accessor: (row) =>
-        row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "-",
+      accessor: (row) => dayjs(row.createdAt).format("MMM DD, YYYY"),
     },
     {
-      header: "Role",
-      accessor: (row) => (
-        <UserRoleSelect
-          userId={row.id}
-          initialRole={row.role as "USER" | "ADMIN"}
-        />
-      ),
-    },
-    {
-      header: "Books Borrowed",
-      accessor: "borrowCount",
-      className: "text-center",
-    },
-    {
-      header: "University ID No.",
+      header: "University ID No",
       accessor: "universityId",
     },
     {
@@ -125,18 +105,16 @@ async function Page({
       ),
     },
     {
-      header: "Actions",
-      accessor: (row) => (
-        <UserActions userId={row.id} userName={row.fullName} />
-      ),
+      header: "Action",
+      accessor: (row) => <AccountRequestActions userId={row.id} />,
     },
   ];
 
   return (
     <TableLayout>
-      <TableHeader title="All Users" showSortable={true} />
+      <TableHeader title="Account Registration Requests" showSortable={true} />
       <div className="mt-7 w-full overflow-hidden">
-        <Table columns={columns} data={users} />
+        <Table columns={columns} data={pendingUsers} />
       </div>
       {totalPages > 1 && (
         <Pagination currentPage={page} totalPages={totalPages} />

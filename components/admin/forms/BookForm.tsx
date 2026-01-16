@@ -19,38 +19,43 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import ColorPicker from "@/components/admin/ColorPicker";
-import { createBook } from "@/lib/admin/actions/book";
+import { createBook, updateBook } from "@/lib/admin/actions/book";
 import { toast } from "sonner";
 
 interface Props extends Partial<Book> {
   type?: "create" | "update";
 }
 
-const BookForm = ({ type, ...book }: Props) => {
+const BookForm = ({ type = "create", ...book }: Props) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1,
-      totalCopies: 1,
-      coverUrl: "",
-      coverColor: "",
-      videoUrl: "",
-      summary: "",
+      title: book.title || "",
+      description: book.description || "",
+      author: book.author || "",
+      genre: book.genre || "",
+      rating: book.rating || 1,
+      totalCopies: book.totalCopies || 1,
+      coverUrl: book.coverUrl || "",
+      coverColor: book.coverColor || "",
+      videoUrl: book.videoUrl || "",
+      summary: book.summary || "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const result = await createBook(values);
+    let result;
+    if (type === "create") {
+      result = await createBook(values);
+    } else {
+      result = await updateBook({ ...values, id: book.id as string });
+    }
 
     if (result.success) {
       toast.success("Success", {
-        description: "Book created successfully",
+        description: `Book ${type === "create" ? "created" : "updated"} successfully`,
       });
 
       router.push(`/admin/books/${result.data.id}`);
@@ -280,7 +285,7 @@ const BookForm = ({ type, ...book }: Props) => {
         />
 
         <Button type="submit" className="book-form_btn text-white">
-          Add Book to Library
+          {type === "create" ? "Add Book to Library" : "Update Book"}
         </Button>
       </form>
     </Form>

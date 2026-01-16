@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
@@ -81,7 +81,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --background-image-pattern: url('/images/pattern.webp');
+  --background-image-pattern: url("/images/pattern.webp");
 }
 
 /*
@@ -214,7 +214,7 @@
 }
 
 @utility search-input {
-  @apply w-full! border-none! font-bold! placeholder:font-normal! text-white! placeholder:text-light-100! focus-visible:ring-0! focus-visible:shadow-none!;
+  @apply w-full! border-none! outline-none! font-bold! placeholder:font-normal! text-white! placeholder:text-light-100! focus-visible:ring-0! focus-visible:shadow-none!;
 }
 
 @utility book-receipt_admin-btn {
@@ -333,7 +333,6 @@
 }
 
 @layer components {
-
   /* Book Ticket */
   #book-ticket {
     @apply relative mt-10 hidden w-[544px] overflow-hidden bg-dark-300 py-8;

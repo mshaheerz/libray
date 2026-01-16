@@ -5,12 +5,9 @@ interface Props {
   title: string;
   books: Book[];
   containerClassName?: string;
-  from?: "borrowed" | "borrowed";
 }
 
-const BookList = ({ title, books, containerClassName, from="borrowed" }: Props) => {
-  if (from !== "borrowed" && books.length < 2) return;
-
+const BookList = ({ title, books, containerClassName }: Props) => {
   return (
     <section className={containerClassName}>
       <h2 className="font-bebas-neue text-4xl text-light-100">{title}</h2>

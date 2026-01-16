@@ -37,7 +37,7 @@ const Sidebar = ({ session }: { session: Session }) => {
                 <div
                   className={cn(
                     "link",
-                    isSelected && "bg-primary-admin shadow-sm",
+                    isSelected && "bg-primary-admin shadow-sm"
                   )}
                 >
                   <div className="relative size-5">
@@ -49,7 +49,13 @@ const Sidebar = ({ session }: { session: Session }) => {
                     />
                   </div>
 
-                  <p className={cn(isSelected ? "text-white" : "text-dark")}>
+                  <p
+                    className={cn(
+                      isSelected
+                        ? "text-white"
+                        : "text-dark-200 dark:text-light-500"
+                    )}
+                  >
                     {link.text}
                   </p>
                 </div>
@@ -61,14 +67,18 @@ const Sidebar = ({ session }: { session: Session }) => {
 
       <div className="user">
         <Avatar>
-          <AvatarFallback className="bg-amber-100">
+          <AvatarFallback className="bg-amber-100 dark:bg-amber-900 dark:text-amber-100">
             {getInitials(session?.user?.name || "IN")}
           </AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col max-md:hidden">
-          <p className="font-semibold text-dark-200">{session?.user?.name}</p>
-          <p className="text-xs text-light-500">{session?.user?.email}</p>
+          <p className="font-semibold text-dark-200 dark:text-light-400">
+            {session?.user?.name}
+          </p>
+          <p className="text-xs text-light-500 dark:text-light-500/80">
+            {session?.user?.email}
+          </p>
         </div>
       </div>
     </div>
