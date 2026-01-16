@@ -1,20 +1,22 @@
-import { signOut } from "@/auth";
+import { auth } from "@/auth";
 import BookList from "@/components/BookList";
-import { Button } from "@/components/ui/button";
-import { sampleBooks } from "@/constants";
-import React from "react";
+import BookOverview from "@/components/BookOverview";
+import { db } from "@/database/drizzle";
+import { books, borrowRecords } from "@/database/schema";
+import { eq } from "drizzle-orm";
 
-function MyProfilePage() {
+async function MyProfilePage() {
+  const session = await auth();
+  const borrowedBooks = await db
+    .select()
+    .from(borrowRecords)
+    .innerJoin(books, eq(borrowRecords.bookId, books.id))
+    .where(eq(borrowRecords.userId, session?.user?.id as string));
+
+  const boo = borrowedBooks?.map((book) => book.books);
   return (
     <>
-      <form action={async () => {
-        "use server";
-
-        await signOut();
-      }}>
-        <Button type="submit">Logout</Button>
-      </form>
-      <BookList title="My Books" books={sampleBooks} />
+      <BookList from="borrowed" title="My Books " books={boo as Book[]} />
     </>
   );
 }

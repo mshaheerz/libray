@@ -1,7 +1,7 @@
 import React from "react";
-import Image from "next/image";;
+import Image from "next/image";
 import { db } from "@/database/drizzle";
-import { users } from "@/database/schema";
+import { borrowRecords, users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import BorrowBook from "./BorrowBook";
 import BookCover from "./BookCover";
@@ -27,13 +27,20 @@ const BookOverview = async ({
     .from(users)
     .where(eq(users.id, userId))
     .limit(1);
-
+  const [borrowedBook] = await db
+    .select()
+    .from(borrowRecords)
+    .where(eq(borrowRecords.bookId, id))
+    .limit(1);
   const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user?.status === "APPROVED",
-    message:
-      availableCopies <= 0
+    isEligible:
+      availableCopies > 0 && user?.status === "APPROVED" && !borrowedBook,
+    message: borrowedBook
+      ? "Book is already borrowed"
+      : availableCopies <= 0
         ? "Book is not available"
         : "You are not eligible to borrow this book",
+    buttonLabel: borrowedBook ? "Borrowed" : "Borrow Book",
   };
   return (
     <section className="book-overview text-white">

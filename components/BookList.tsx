@@ -5,10 +5,11 @@ interface Props {
   title: string;
   books: Book[];
   containerClassName?: string;
+  from?: "borrowed" | "borrowed";
 }
 
-const BookList = ({ title, books, containerClassName }: Props) => {
-  if (books.length < 2) return;
+const BookList = ({ title, books, containerClassName, from="borrowed" }: Props) => {
+  if (from !== "borrowed" && books.length < 2) return;
 
   return (
     <section className={containerClassName}>
