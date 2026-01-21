@@ -15,8 +15,7 @@ A modern, responsive university library web application built with TypeScript an
 
 ## Demo
 (Replace with a link or GIF)
-- Live demo: https://your-deployment-url.example
-- Screenshots: add `assets/screenshots` or `public/screenshots`
+- Live demo: (https://libray-xi.vercel.app/)
 
 ## Features
 - Authentication (NextAuth)
@@ -172,10 +171,3 @@ Design tokens & theme
 
 ## License
 Specify your license (e.g., MIT). Replace this line with actual license info.
-
----
-
-If you want, I can:
-- Commit this README.md to the repository for you,
-- Generate a `.env.example` template inferred from code,
-- Or create a short CONTRIBUTING.md and DESIGN.md that documents the UI system and Tailwind tokens.
